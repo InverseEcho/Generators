@@ -1,0 +1,698 @@
+<style>
+  :root {
+    --bg: #0f1115;
+    --card-bg: #1a1d24;
+    --sidebar-bg: #14161b;
+    --border: #2d313a;
+    --border-hover: #4da6ff;
+    --text: #f0f0f5;
+    --text-muted: #9aa0a6;
+    --accent: #4da6ff;
+    --like: #ff4d88;
+  }
+
+  body {
+    margin: 0;
+    background-color: var(--bg);
+    color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 3rem 1.5rem;
+  }
+
+  .header {
+    text-align: center;
+    margin-bottom: 3rem;
+  }
+
+  .header h1 {
+    color: var(--accent);
+    font-size: 2.5rem;
+    font-weight: 800;
+    margin: 0 0 1rem;
+    letter-spacing: -0.02em;
+  }
+
+  .header p {
+    color: var(--text-muted);
+    max-width: 600px;
+    margin: 0 auto;
+    line-height: 1.6;
+    font-size: 1.1rem;
+    text-wrap: balance;
+  }
+
+  /* Tabs */
+  .tabs {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin-bottom: 2.5rem;
+  }
+
+  .tab-btn {
+    background: transparent;
+    border: none;
+    color: var(--text-muted);
+    font-size: 1rem;
+    font-weight: 600;
+    padding: 0.75rem 1.5rem;
+    cursor: pointer;
+    border-radius: 8px;
+    transition: all 0.2s ease;
+  }
+
+  .tab-btn:hover {
+    color: var(--text);
+    background: rgba(255,255,255,0.05);
+  }
+
+  .tab-btn.active {
+    color: var(--text);
+    background: rgba(77, 166, 255, 0.15);
+    color: var(--accent);
+  }
+
+  /* Projects Grid */
+  .projects-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+    gap: 2rem;
+  }
+
+  /* Card */
+  .card {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), border-color 0.3s;
+  }
+
+  .card:hover {
+    transform: translateY(-4px);
+    border-color: var(--border-hover);
+  }
+
+  .card-img-wrapper {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16/9;
+    overflow: hidden;
+  }
+
+  .card-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s ease;
+  }
+
+  .card:hover .card-img {
+    transform: scale(1.05);
+  }
+
+  .card-time-badge {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    background: rgba(0, 0, 0, 0.65);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    color: #fff;
+    font-size: 0.72rem;
+    font-weight: 600;
+    padding: 6px 12px;
+    border-radius: 20px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    border: 1px solid rgba(255,255,255,0.15);
+    letter-spacing: 0.02em;
+    pointer-events: none;
+  }
+
+  .card-main {
+    flex: 1;
+    padding: 1.5rem 1.5rem 1.25rem;
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    text-align: left;
+  }
+
+  .card-title {
+    color: var(--text);
+    text-decoration: none;
+    font-size: 1.3rem;
+    font-weight: 700;
+    margin-bottom: 0.6rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: block;
+  }
+  
+  .card-title:hover {
+    color: var(--accent);
+  }
+
+  .card-desc {
+    color: var(--text-muted);
+    font-size: 0.95rem;
+    line-height: 1.6;
+    height: 4.8em; /* 3 lines of text */
+    overflow-y: auto;
+    text-align: left;
+    padding-right: 6px;
+    margin-bottom: 0;
+  }
+
+  .card-desc::-webkit-scrollbar {
+    width: 4px;
+  }
+  .card-desc::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  .card-desc::-webkit-scrollbar-thumb {
+    background: rgba(255,255,255,0.1);
+    border-radius: 4px;
+  }
+  .card-desc::-webkit-scrollbar-thumb:hover {
+    background: rgba(255,255,255,0.2);
+  }
+
+  .card-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 1.5rem;
+    border-top: 1px solid var(--border);
+    background: rgba(255, 255, 255, 0.02);
+  }
+
+  .footer-stat {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .stat-val-small {
+    font-weight: 700;
+    font-size: 1.05rem;
+    color: var(--text);
+  }
+
+  .stat-label-small {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    font-weight: 600;
+  }
+
+  .like-btn-small {
+    background: none;
+    border: none;
+    padding: 0;
+    font-size: 1.4rem;
+    color: #555;
+    cursor: pointer;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    line-height: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .like-btn-small:hover {
+    transform: scale(1.15);
+  }
+
+  .like-btn-small.liked {
+    color: var(--like);
+    text-shadow: 0 0 12px rgba(255, 77, 136, 0.4);
+  }
+  
+  .like-val-small {
+    font-weight: 700;
+    font-size: 1.05rem;
+    color: var(--text);
+  }
+
+  .footer-like {
+    gap: 8px;
+  }
+
+  /* Small inline loader for like counts */
+  .like-loader {
+    display: inline-block;
+    width: 14px;
+    height: 14px;
+    border: 2px solid rgba(255,255,255,0.15);
+    border-top-color: var(--text);
+    border-radius: 50%;
+    animation: spin 0.7s linear infinite;
+    vertical-align: middle;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* Responsive */
+  @media (max-width: 600px) {
+    .projects-grid {
+      grid-template-columns: 1fr;
+    }
+    .header h1 {
+      font-size: 2rem;
+    }
+  }
+
+  /* Hidden comments */
+  .gen-comments-hidden {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+    width: 0;
+    height: 0;
+    overflow: hidden;
+  }
+
+  /* Loader */
+  .lds-default { display: inline-block; position: relative; width: 80px; height: 80px; margin: 3rem auto; display: block; }
+  .lds-default div { position: absolute; width: 6px; height: 6px; background: var(--accent); border-radius: 50%; animation: lds-default 1.2s linear infinite; }
+  .lds-default div:nth-child(1) { top: 37px; left: 66px; animation-delay: 0s; }
+  .lds-default div:nth-child(2) { top: 22px; left: 62px; animation-delay: -0.1s; }
+  .lds-default div:nth-child(3) { top: 11px; left: 52px; animation-delay: -0.2s; }
+  .lds-default div:nth-child(4) { top: 7px; left: 37px; animation-delay: -0.3s; }
+  .lds-default div:nth-child(5) { top: 11px; left: 22px; animation-delay: -0.4s; }
+  .lds-default div:nth-child(6) { top: 22px; left: 11px; animation-delay: -0.5s; }
+  .lds-default div:nth-child(7) { top: 37px; left: 7px; animation-delay: -0.6s; }
+  .lds-default div:nth-child(8) { top: 52px; left: 11px; animation-delay: -0.7s; }
+  .lds-default div:nth-child(9) { top: 62px; left: 22px; animation-delay: -0.8s; }
+  .lds-default div:nth-child(10) { top: 66px; left: 37px; animation-delay: -0.9s; }
+  .lds-default div:nth-child(11) { top: 62px; left: 52px; animation-delay: -1s; }
+  .lds-default div:nth-child(12) { top: 52px; left: 62px; animation-delay: -1.1s; }
+  @keyframes lds-default { 0%, 20%, 80%, 100% { transform: scale(1); } 50% { transform: scale(1.5); } }
+
+  /* Chat Popup */
+  #chatToggleBtn {
+    position: fixed;
+    bottom: 2rem;
+    right: 2rem;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background-color: var(--accent);
+    color: white;
+    border: none;
+    box-shadow: 0 4px 15px rgba(77, 166, 255, 0.3);
+    cursor: pointer;
+    z-index: 1000;
+    font-size: 28px;
+    transition: transform 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  #chatToggleBtn:hover { transform: scale(1.1); }
+  
+  #chatPopupCtn {
+    position: fixed;
+    bottom: 6.5rem;
+    right: 2rem;
+    width: 360px;
+    height: 500px;
+    max-height: calc(100vh - 120px);
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+    z-index: 999;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  }
+  @keyframes popIn {
+    from { opacity: 0; transform: scale(0.9) translateY(10px); }
+    to { opacity: 1; transform: scale(1) translateY(0); }
+  }
+  #chatPopupHeader {
+    background: var(--card-bg);
+    padding: 1rem 1.25rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid var(--border);
+  }
+  #chatPopupTitle {
+    font-weight: 700;
+    font-size: 1.05rem;
+  }
+  #closeChatBtn {
+    background: none;
+    border: none;
+    color: var(--text-muted);
+    font-size: 1.5rem;
+    cursor: pointer;
+    line-height: 1;
+    padding: 0;
+  }
+  #closeChatBtn:hover { color: var(--text); }
+  #chatPluginWrapper {
+    flex: 1;
+    background: var(--bg);
+  }
+  @media (max-width: 600px) {
+    #chatPopupCtn {
+      right: 1rem;
+      left: 1rem;
+      bottom: 5rem;
+      width: auto;
+    }
+  }
+</style>
+
+<div class="container">
+  <header class="header">
+    <h1>[title]</h1>
+    <p>[description]</p>
+  </header>
+
+  <div class="tabs">
+    <button id="activeTabBtn" class="tab-btn active" onclick="showActive()">Active Projects</button>
+    <button id="archivesTabBtn" class="tab-btn" onclick="showArchives()">Archives</button>
+  </div>
+
+  <div id="activeListEl" class="projects-grid"> 
+    <div class="lds-default"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
+  </div>
+
+  <div id="archivesListEl" class="projects-grid" hidden>
+    <div class="lds-default"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
+  </div>
+</div>
+
+<!-- Chat Plugin UI -->
+<button id="chatToggleBtn" title="Open Chat">💬</button>
+<div id="chatPopupCtn" hidden>
+  <div id="chatPopupHeader">
+    <span id="chatPopupTitle">Community Chat</span>
+    <button id="closeChatBtn" title="Close">&times;</button>
+  </div>
+  <div id="chatPluginWrapper"></div>
+  <script>chatPluginWrapper.innerHTML = commentsPlugin({channel:"general-chat", width:"100%", height:"100%"});</script>
+</div>
+
+<script> 
+  /* --- Likes system via comments plugin (per-generator instances) --- */
+  window.genCommentPlugins = {}; // Store the loaded visible comments plugins
+  window.genLikeState = {};
+
+  // Global handler called by each plugin's onComment for incremental like updates (faster than full rescans)
+  window.onPerchanceComment = (comment) => {
+    if (!comment || !comment.autoSent) return 0;
+    let m = (comment.message || "").trim().match(/^(\d+)#([^ ]*?)$/);
+    if (!m) return 0;
+
+    let name = comment._name || comment.channel;
+    if (!name) return 0;
+
+    let state = window.genLikeState[name];
+    if (!state) return 0;
+
+    let num = parseInt(m[1], 10), prevId = m[2];
+    if (prevId !== state.latestId) return 0;
+
+    let uid = comment.user?.id || comment.userId || comment.nickname || "anon";
+
+    if (num === state.count + 1) {
+      if (comment.byCurrentUser) {
+        if (state.me) return 0;
+        state.me = true;
+      } else {
+        if (state.users.has(uid)) return 0;
+        state.users.add(uid);
+      }
+      state.count = num;
+      state.latestId = comment.id;
+    } else if (num === state.count - 1) {
+      if (comment.byCurrentUser) {
+        if (!state.me) return 0;
+        state.me = false;
+      } else {
+        if (!state.users.has(uid)) return 0;
+        state.users.delete(uid);
+      }
+      state.count = num;
+      state.latestId = comment.id;
+    } else {
+      return 0;
+    }
+
+    updateLikeUI(name);
+    return 1;
+  };
+
+  function updateLikesFromComments(name) {
+    if (!window.genLikeState[name]) {
+      window.genLikeState[name] = { me: false, count: 0, latestId: "0", users: new Set() };
+    }
+    let state = window.genLikeState[name];
+    let plugin = window.genCommentPlugins[name];
+    if (!plugin) return;
+
+    let comments = [...(plugin.comments || [])].sort((a,b) => a.time - b.time);
+    state.me = false;
+    state.count = 0;
+    state.latestId = "0";
+    state.users.clear();
+
+    for (let c of comments) {
+      if (!c.autoSent) continue;
+      let m = (c.message || "").trim().match(/^(\d+)#([^ ]*?)$/);
+      if (m) {
+        let num = parseInt(m[1], 10), prevId = m[2];
+        let uid = c.user?.id || c.userId || c.nickname || "anon";
+        
+        if (prevId === state.latestId) {
+          if (num === state.count + 1) {
+            if (c.byCurrentUser) {
+              if (state.me) continue;
+              state.me = true;
+            } else {
+              if (state.users.has(uid)) continue;
+              state.users.add(uid);
+            }
+          } else if (num === state.count - 1) {
+            if (c.byCurrentUser) {
+              if (!state.me) continue;
+              state.me = false;
+            } else {
+              if (!state.users.has(uid)) continue;
+              state.users.delete(uid);
+            }
+          } else continue;
+          
+          state.count = num;
+          state.latestId = c.id;
+        }
+      }
+    }
+    
+    updateLikeUI(name);
+  }
+
+  function updateLikeUI(name) {
+    let countEl = document.getElementById(`like-count-${name}El`) || window[`like-count-${name}El`];
+    let btnEl = document.getElementById(`like-btn-${name}Btn`) || window[`like-btn-${name}Btn`];
+    let state = window.genLikeState[name];
+    if (countEl) countEl.textContent = state ? state.count : 0;
+    if (btnEl) {
+      if (state && state.me) btnEl.classList.add("liked");
+      else btnEl.classList.remove("liked");
+    }
+  }
+
+  function toggleLike(name) {
+    let plugin = window.genCommentPlugins[name];
+    if (!plugin) return; // Ignore clicks if comment plugin is not initialized
+    
+    let state = window.genLikeState[name];
+    if (!state) window.genLikeState[name] = state = { me: false, count: 0, latestId: "0", users: new Set() };
+    
+    // Optimistically update local count & UI for instant click response
+    let newMe = !state.me;
+    state.count = state.count + (newMe ? 1 : -1);
+    state.me = newMe;
+    updateLikeUI(name);
+    
+    // Submit programmatically to the comment channel with the tracked structure
+    try {
+      plugin.submit(`${state.count}#${state.latestId}`);
+    } catch (e) {
+      // Revert optimistic update on failure
+      state.count = state.count + (newMe ? -1 : 1);
+      state.me = !newMe;
+      updateLikeUI(name);
+    }
+  }
+
+  // Toggle between a generator's custom image and its preview screenshot
+  function imgToggleClick(e, img) {
+    if (!img.dataset.custom) return; // No custom image, let click bubble to wrapper
+    e.stopPropagation();
+    img.src = img.dataset.showing === 'custom' ? img.dataset.screenshot : img.dataset.custom;
+    img.dataset.showing = img.dataset.showing === 'custom' ? 'screenshot' : 'custom';
+  }
+
+  async function loadData() {
+    const nativeLazyLoadIsSupported = ("loading" in document.createElement("img"));
+    const YEAR_MS = 1000 * 60 * 60 * 24 * 365; // Approximate 1 year threshold
+
+    // Scalable list - add new generator names here
+    let generatorNameArray = Array.isArray(generatorList) ? generatorList : (generatorList.selectAll || generatorList.list || []);
+    
+    let generatorDataArray = await Promise.all(generatorNameArray.map(n => {
+      return superFetch("https://perchance.org/api/getGeneratorStats?name="+n).then(r => r.json()).catch(() => null);
+    }));
+    generatorDataArray = generatorDataArray.map(r => r && r.data ? r.data : null);
+    
+    let activeCards = [];
+    let archiveCards = [];
+    for(let i = 0; i < generatorNameArray.length; i++) {
+      let name = generatorNameArray[i];
+      let data = generatorDataArray[i];
+      if (!data) continue; // Skip generators that failed to load
+      
+      // Determine if project is older than 1 year
+      let rawEditTime = data.lastEditTime || 0;
+      let isOld = (Date.now() - rawEditTime) > YEAR_MS;
+      
+      (isOld ? archiveCards : activeCards).push({name, data});
+    }
+    
+    // Sort each category by view count descending
+    activeCards.sort((a, b) => (b.data.views || 0) - (a.data.views || 0));
+    archiveCards.sort((a, b) => (b.data.views || 0) - (a.data.views || 0));
+    
+    function makeCardHtml({name, data}) {
+      let g = formatData(data);
+      let screenshotUrl = `https://perchance.org/api/getGeneratorScreenshot?generatorName=${name}`;
+      let customImageUrl = (data.metaData && data.metaData.image) ? data.metaData.image : "";
+      let hasImage = !!customImageUrl;
+      let displayUrl = hasImage ? customImageUrl : screenshotUrl;
+      let imgTag = nativeLazyLoadIsSupported
+        ? `<img loading="lazy" src="${displayUrl}" class="card-img" data-screenshot="${screenshotUrl}" data-custom="${customImageUrl}" data-showing="${hasImage ? 'custom' : 'screenshot'}" onclick="imgToggleClick(event, this)" />`
+        : `<img class="card-img lazy" data-src="${displayUrl}" data-screenshot="${screenshotUrl}" data-custom="${customImageUrl}" data-showing="${hasImage ? 'custom' : 'screenshot'}" onclick="imgToggleClick(event, this)" />`;
+      
+      // Format name for display (replace hyphens with spaces and capitalize)
+      let displayName = String(name).replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+
+      return `<div class="card">
+        <div class="card-img-wrapper" style="cursor:pointer;" onclick="window.open('/${name}', '_blank')">
+          ${imgTag}
+          <div class="card-time-badge">${g.lastEditTime.split(" ")[0]} ${g.lastEditTime.split(" ").slice(1).join(" ")}</div>
+        </div>
+        <div class="card-main">
+          <a href="/${name}" target="_blank" rel="noopener noreferrer" class="card-title" onclick="window.open('/${name}', '_blank'); return false;">${displayName}</a>
+          <div class="card-desc">${g.metaData && g.metaData.description ? g.metaData.description : ""}</div>
+        </div>
+        <div class="card-footer">
+          <div class="footer-stat">
+            <span class="stat-val-small">${g.views}</span>
+            <span class="stat-label-small">views</span>
+          </div>
+          <div class="footer-stat footer-like">
+            <button id="like-btn-${name}Btn" class="like-btn-small" onclick="toggleLike('${name}')" title="Like this generator">♥</button>
+            <span id="like-count-${name}El" class="like-val-small"><span class="like-loader"></span></span>
+            <span class="stat-label-small">likes</span>
+          </div>
+        </div>
+        <div id="comments-${name}Ctn" class="gen-comments-hidden"></div>
+      </div>`;
+    }
+    
+    let activeHtml = activeCards.map(makeCardHtml).join("");
+    let archivesHtml = archiveCards.map(makeCardHtml).join("");
+    
+    activeListEl.innerHTML = activeHtml || '<p style="grid-column: 1 / -1; width:100%; opacity:0.6; text-align:center; padding: 2rem 0;">No active projects found.</p>';
+    archivesListEl.innerHTML = archivesHtml || '<p style="grid-column: 1 / -1; width:100%; opacity:0.6; text-align:center; padding: 2rem 0;">No archived projects older than 1 year.</p>';
+
+    // Initialize per-generator plugins now that DOM elements exist
+    for (let i = 0; i < generatorNameArray.length; i++) {
+      let name = generatorNameArray[i];
+      let data = generatorDataArray[i];
+      if (!data) continue;
+      
+      let commentsCtn = document.getElementById(`comments-${name}Ctn`);
+      if (commentsCtn) {
+        window.genCommentPlugins[name] = commentsPlugin({
+          channel: name,
+          width: "100%",
+          height: "280px",
+          onLoad: (comments) => {
+            updateLikesFromComments(name);
+          },
+          onComment: (comment) => (comment._name = name, (typeof window.onPerchanceComment === 'function') ? window.onPerchanceComment(comment) : 0)
+        });
+        commentsCtn.innerHTML = window.genCommentPlugins[name];
+      }
+    }
+  }
+  loadData();
+  
+  
+  
+  function formatData(data) {
+    let g = data ? JSON.parse(JSON.stringify(data)) : {}; // clone safely
+    if(!g.views) g.views = 0;
+    g.views = g.views > 999 ? (g.views/1000).toFixed(1) + 'k' : g.views;
+
+    // Guard against missing lastEditTime so we don not get NaN
+    let editTime = g.lastEditTime || 0;
+    g.lastEditTime = Date.now() - editTime;
+    g.lastEditTime /= 1000;
+    if(g.lastEditTime > 60*60*24*30*12) {
+      let t = Math.round(g.lastEditTime/(60*60*24*30*12));
+      g.lastEditTime = t + ` year${t==1?"":"s"} ago`;
+    } else if(g.lastEditTime > 60*60*24*30) {
+      let t = Math.round(g.lastEditTime/(60*60*24*30));
+      g.lastEditTime = t + ` month${t==1?"":"s"} ago`;
+    } else if(g.lastEditTime > 60*60*24) {
+      let t = Math.round(g.lastEditTime/(60*60*24));
+      g.lastEditTime = t + ` day${t==1?"":"s"} ago`;
+    } else if(g.lastEditTime > 60*60) {
+      let t = Math.round(g.lastEditTime/(60*60));
+      g.lastEditTime = t + ` hour${t==1?"":"s"} ago`;
+    } else if(g.lastEditTime > 60) {
+      let t = Math.round(g.lastEditTime/60);
+      g.lastEditTime = t + ` minute${t==1?"":"s"} ago`;
+    } else {
+      g.lastEditTime = "just now";
+    }
+    return g;
+  }
+
+  function showActive() {
+    activeListEl.hidden = false;
+    archivesListEl.hidden = true;
+    activeTabBtn.classList.add("active");
+    archivesTabBtn.classList.remove("active");
+  }
+
+  function showArchives() {
+    activeListEl.hidden = true;
+    archivesListEl.hidden = false;
+    activeTabBtn.classList.remove("active");
+    archivesTabBtn.classList.add("active");
+  }
+
+  chatToggleBtn.onclick = () => chatPopupCtn.hidden = !chatPopupCtn.hidden;
+  closeChatBtn.onclick = () => chatPopupCtn.hidden = true;
+</script>
